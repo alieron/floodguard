@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "floodguard",
+    "name": "FloodGuard",
     "slug": "floodguard",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -23,6 +23,7 @@
       "edgeToEdgeEnabled": true
     },
     "web": {
+      "bundler": "metro",
       "favicon": "./assets/favicon.png"
     }
   }
