@@ -13,9 +13,10 @@ const Tab = createBottomTabNavigator();
 export default function App() {
   return (
     <NavigationContainer>
+      {/* remove the tabBar prop and add BottomNavBar to select screens if there are other screens u dont want to have navbar on */}
       <Tab.Navigator
         screenOptions={{ headerShown: false }}
-        tabBar={() => <BottomNavBar />} // remove and add BottomNavBar to select screens if there are other screens u dont want to have navbar on
+        tabBar={() => <BottomNavBar />}
       >
         {/* Default screen */}
         <Tab.Screen name="Home" component={Home}/>
