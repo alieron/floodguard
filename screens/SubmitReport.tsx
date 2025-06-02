@@ -1,7 +1,10 @@
-import { Text, View, TouchableOpacity } from "react-native";
+import { Text, View, TouchableOpacity, Alert, Button } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import * as Location from 'expo-location';
+import React, { useState } from 'react';
 
 export default function SubmitReport() {
+
   return (
     <View className="flex-1 justify-center items-center bg-blue-300">
       <Text className="text-center text-black text-lg text-3xl">
@@ -35,12 +38,7 @@ export default function SubmitReport() {
             Select location or use current location.
           </Text>
           <View className="rounded-2xl ring-black ring-2 w-11/12 h-1/2 justify-center items-center flex-row">
-            <TouchableOpacity>
-              <Ionicons name="camera-outline" size={50} margin={20} />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Ionicons name="image-outline" size={50} margin={20} />
-            </TouchableOpacity>
+            
           </View>
         </View>
       </View>
