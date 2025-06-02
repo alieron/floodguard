@@ -48,6 +48,7 @@ export default function Settings() {
         <SettingRow label="Heavy rain warnings" value={rainAlert} onChange={setRainAlert} />
         <SettingRow label="Alerts from PUB" value={pubAlert} onChange={setPubAlert} />
       </View>
+      </Text>
     </View>
   );
 }
