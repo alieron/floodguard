@@ -2,7 +2,7 @@ import './index.css';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from './screens/Home';
-import FloodMap from './screens/FloodMap';
+import Notifications from './screens/Notifications';
 import FloodBot from './screens/FloodBot';
 import SubmitReport from './screens/SubmitReport';
 import Settings from './screens/Settings';
@@ -20,7 +20,7 @@ export default function App() {
       >
         {/* Default screen */}
         <Tab.Screen name="Home" component={Home}/>
-        <Tab.Screen name="FloodMap" component={FloodMap}/>
+        <Tab.Screen name="Notifications" component={Notifications}/>
         <Tab.Screen name="SubmitReport" component={SubmitReport}/>
         <Tab.Screen name="FloodBot" component={FloodBot}/>
         <Tab.Screen name="Settings" component={Settings}/>

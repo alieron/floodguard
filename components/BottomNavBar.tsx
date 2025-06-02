@@ -12,7 +12,7 @@ export default function BottomNavBar() {
           <Ionicons name="home-outline" size={24} color="white" onPress={() => navigation.navigate('Home')}/>
         </TouchableOpacity>
         <TouchableOpacity>
-          <Ionicons name="notifications-outline" size={24} color="white" onPress={() => navigation.navigate('FloodMap')}/>
+          <Ionicons name="notifications-outline" size={24} color="white" onPress={() => navigation.navigate('Notifications')}/>
         </TouchableOpacity>
         <TouchableOpacity>
           <Ionicons name="add-circle-outline" size={28} color="white" onPress={() => navigation.navigate('SubmitReport')}/>
