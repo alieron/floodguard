@@ -1,16 +1,10 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Switch,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, Switch } from "react-native";
 
-function SettingRow({ label, value, onChange }) {
+function SettingRow({ label, value, onChange }: { label: string, value: boolean, onChange: React.Dispatch<React.SetStateAction<boolean>>}) {
   return (
-    <View style={styles.settingRow}>
-      <Text style={styles.settingText}>{label}</Text>
+    <View className="flex-row justify-between items-center mb-3">
+      <Text className="text-[15px] text-neutral-900">{label}</Text>
       <Switch
         value={value}
         onValueChange={onChange}
@@ -30,20 +24,26 @@ export default function Settings() {
   const [pubAlert, setPubAlert] = useState(true);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerText}>SETTINGS</Text>
+    <View className="flex-1 bg-sky-200 px-5 pt-20">
+      <View className="flex-row justify-center mb-6">
+        <Text className="text-[25px] font-bold text-neutral-900">
+          SETTINGS
+        </Text>
       </View>
 
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>NOTIFICATIONS</Text>
+      <View className="mb-6">
+        <Text className="text-base font-bold mb-3 text-neutral-900">
+          NOTIFICATIONS
+        </Text>
         <SettingRow label="Push notifications" value={pushNoti} onChange={setPushNoti} />
         <SettingRow label="Email notifications" value={emailNoti} onChange={setEmailNoti} />
         <SettingRow label="In-app notifications" value={inAppNoti} onChange={setInAppNoti} />
       </View>
 
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>ALERTS</Text>
+      <View className="mb-6">
+        <Text className="text-base font-bold mb-3 text-neutral-900">
+          ALERTS
+        </Text>
         <SettingRow label="Flash flood warnings" value={floodAlert} onChange={setFloodAlert} />
         <SettingRow label="Heavy rain warnings" value={rainAlert} onChange={setRainAlert} />
         <SettingRow label="Alerts from PUB" value={pubAlert} onChange={setPubAlert} />
@@ -51,42 +51,3 @@ export default function Settings() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#a3d9ff",
-    paddingHorizontal: 20,
-    paddingTop: 80,
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "center",
-    gap: 12,
-    marginBottom: 24,
-  },
-  headerText: {
-    fontSize: 25,
-    fontWeight: "bold",
-    color: "#1A1A1A",
-  },
-  section: {
-    marginBottom: 24,
-  },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 12,
-    color: "#1A1A1A",
-  },
-  settingRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 12,
-  },
-  settingText: {
-    fontSize: 15,
-    color: "#1A1A1A",
-  },
-});
