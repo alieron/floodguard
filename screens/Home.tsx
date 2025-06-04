@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, ImageBackground, TouchableOpacity } from 'react-native';
+import { Text, View, Image, ImageBackground, TouchableOpacity } from 'react-native';
 import { useState } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
 
@@ -14,15 +14,15 @@ export default function Home() {
           ? require("../assets/FloodMapAfter.png")
           : require("../assets/FloodMapBefore.png")
       }
-      style={styles.background}
+      className="flex-1 justify-center"
       resizeMode="cover"
     >
-      <View style={styles.container}>
+      <View className="absolute top-20 self-center w-[90%] z-10">
         <TouchableOpacity
-          style={styles.header}
+          className="bg-blue-600 px-4 py-3 rounded-t-lg flex-row justify-center items-center"
           onPress={() => setExpanded(!expanded)}
         >
-          <Text style={styles.headerText}>ALERTS</Text>
+          <Text className="text-white font-bold text-base">ALERTS</Text>
           <FontAwesome
             name={expanded ? "chevron-up" : "chevron-down"}
             size={16}
@@ -32,145 +32,45 @@ export default function Home() {
         </TouchableOpacity>
 
         {expanded && (
-          <View style={styles.alertBox}>
-            <Text style={styles.title}>Flash flood at King's Road</Text>
-            <Text style={styles.message}>
+          <View className="bg-white p-3 rounded-b-lg">
+            <Text className="font-bold text-sm mb-1.5">Flash flood at King's Road</Text>
+            <Text className="text-xs mb-1.5">
               Flash flood occurred at King's Road (from Prince Road to Lutheran
               Road). Please avoid the area. PUB officers have been deployed to
               render assistance.
             </Text>
-            <Text style={styles.time}>Issued at 1:03</Text>
+            <Text className="text-[11px] text-gray-500 text-right">Issued at 1:03</Text>
           </View>
         )}
       </View>
 
       <TouchableOpacity
-        style={styles.pinsButton}
+        className="absolute top-[450px] left-[160px] w-[50px] h-[55px] bg-transparent"
         onPress={() => setVisible(true)}
       />
 
       {visible && (
-        <View style={styles.popup}>
-          <View style={styles.popupHeader}>
+        <View className="absolute top-[150px] self-center w-[85%] bg-white rounded-lg z-10 shadow-md pb-2">
+          <View className="bg-blue-600 p-2 rounded-t-lg items-end">
             <TouchableOpacity onPress={() => setVisible(false)}>
-              <Text style={styles.closeButton}>✕</Text>
+              <Text className="text-white text-lg px-1.5">✕</Text>
             </TouchableOpacity>
           </View>
           <Image
-            source={require("../assets/FloodImageExample.png")}  // 🔥 Hardcoded here
-            style={styles.image}
+            source={require("../assets/FloodImageExample.png")}
+            className="w-full h-[200px]"
             resizeMode="cover"
           />
-          <Text style={styles.timestamp}>Uploaded at 14:10</Text>
+          <Text className="text-xs text-right mt-1 mr-2 text-gray-500">Uploaded at 14:10</Text>
         </View>
       )}
 
       <TouchableOpacity 
-        style={styles.refreshButton}
+        className="absolute bottom-[100px] right-[30px] p-2 bg-white rounded-full"
         onPress={() => setAddedPin(!addedPin)}
       >
         <FontAwesome name="refresh" size={24} color="black" />
       </TouchableOpacity>
-       
-
     </ImageBackground>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    position: "absolute",
-    top: 80,
-    alignSelf: "center",
-    width: "90%",
-    zIndex: 10,
-  },
-  header: {
-    backgroundColor: "#007BFF",
-    padding: 12,
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  headerText: {
-    color: "white",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-  alertBox: {
-    backgroundColor: "white",
-    padding: 12,
-    borderBottomLeftRadius: 8,
-    borderBottomRightRadius: 8,
-  },
-  title: {
-    fontWeight: "bold",
-    fontSize: 15,
-    marginBottom: 4,
-  },
-  message: {
-    fontSize: 13,
-    marginBottom: 6,
-  },
-  time: {
-    fontSize: 11,
-    color: "gray",
-    textAlign: "right",
-  },
-  background: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  refreshButton: {
-    position: "absolute",
-    bottom: 100,
-    right: 30,
-    padding: 10,
-    backgroundColor: "white",
-    borderRadius: 999,
-  },
-  pinsButton: {
-    position: "absolute",
-    top: 450,      // adjust vertically
-    left: 160,     // adjust horizontally
-    width: 50,     // touch area width
-    height: 55,    // touch area height
-    backgroundColor: "transparent", // or "rgba(0,0,0,0.2)" for testing
-  },
-  popup: {
-    position: "absolute",
-    top: 150,
-    alignSelf: "center",
-    width: "85%",
-    backgroundColor: "white",
-    borderRadius: 10,
-    elevation: 5,
-    zIndex: 10,
-    paddingBottom: 10,
-  },
-  popupHeader: {
-    backgroundColor: "#007BFF",
-    padding: 8,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-    alignItems: "flex-end",
-  },
-  closeButton: {
-    color: "white",
-    fontSize: 18,
-    paddingHorizontal: 5,
-  },
-  image: {
-    width: "100%",
-    height: 200,
-  },
-  timestamp: {
-    fontSize: 12,
-    textAlign: "right",
-    marginTop: 4,
-    marginRight: 10,
-    color: "gray",
-  },
-})
