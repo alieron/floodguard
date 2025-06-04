@@ -13,15 +13,15 @@ export default function ReportFormBox({
   children,
 }: ReportFormBoxProps) {
   return (
-      <View className="bg-white w-10/12 h-1/4 rounded-2xl m-5">
+      <View className="bg-white w-96 rounded-2xl m-5 pb-2">
         <Text className="text-3xl bg-blue-600 rounded-t-2xl p-2 text-center text-white">
           {headerText}
         </Text>
-        <View className="items-center h-full w-full">
+        <View className="items-center">
           <Text className="p-2">
             {subtitle}
           </Text>
-          <View className="rounded-2xl ring-black ring-2 w-11/12 h-3/5 justify-center items-center">
+          <View className="min-h-40 border-black border rounded-2xl justify-center items-center w-11/12">
             {children}
           </View>
         </View>
