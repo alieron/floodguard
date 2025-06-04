@@ -34,7 +34,8 @@ export default function SubmitReport() {
       >
         <View className="justify-center items-center">
           <TouchableOpacity className="bg-blue-600 rounded p-2">
-            <Text className="text-white">Detect location</Text> {/* how... */}
+            <Text className="text-white">Detect location</Text>
+            {/* how... */}
           </TouchableOpacity>
           {/* another option of manually searching your location? */}
         </View>
