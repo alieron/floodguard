@@ -18,7 +18,7 @@ export default function App() {
 			{/* remove the tabBar prop and add BottomNavBar to select screens if there are other screens u dont want to have navbar on */}
 			<Tab.Navigator
 				screenOptions={{ headerLeft: () => null }}
-				tabBar={() => <BottomNavBar />}
+				tabBar={(props) => <BottomNavBar {...props}/>}
 			>
 				{/* Default screen */}
 				<Tab.Screen name="Home" options={{ headerShown: false }} component={Home} />
