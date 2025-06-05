@@ -62,16 +62,15 @@ export default function NotificationsPage() {
 	}, []);
 
 	return (
-		<View className="flex-1 bg-sky-200 mb-20">
-			<View className="px-4 pb-4">
+		<View className="flex-1 bg-sky-200 px-4 mb-20">
 				<FlatList
 					data={notifications}
 					keyExtractor={(item) => item.id}
 					renderItem={({ item }) => <NotificationCard item={item} />}
 					showsVerticalScrollIndicator={false}
 					refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />}
+					className="pt-4"
 				/>
-			</View>
 		</View>
 	);
 }

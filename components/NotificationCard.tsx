@@ -72,7 +72,7 @@ const NotificationCard = ({ item }: { item: NotificationCardProps }) => {
 		: (<><Ionicons name="pin" size={20} color="blue" /><Text>Report</Text></>)
 
 	return (
-		<View className="bg-white rounded-2xl p-4 mt-4 shadow-sm">
+		<View className="bg-white rounded-2xl p-4 mb-4 shadow-sm">
 			<View className="flex flex-row items-center text-lg font-bold mb-2">{typeLabel}</View>
 
 			<ImageSlider images={item.imageUrls} />
