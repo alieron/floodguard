@@ -3,12 +3,12 @@ import { Alert, Image, Text, TextInput, View, ScrollView, TouchableOpacity } fro
 import { Ionicons } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import * as ImagePicker from "expo-image-picker";
-import { uploadImage } from "../utils/appwrite";
+import { addDocument, uploadImage } from "../utils/appwrite";
 
 export default function SubmitReport() {
 	const [description, setDescription] = useState("");
-	const [imageUrls, setImageUrls] = useState<URL[]>([]);
-	const [location, setLocation] = useState<Location.LocationObjectCoords | null>(null);
+	const [imageUrls, setImageUrls] = useState<string[]>([]);
+	const [location, setLocation] = useState<Location.LocationObject | null>(null);
 
 	const uploadImageAssets = async (images: ImagePicker.ImagePickerAsset[]) => {
 		try {
@@ -22,7 +22,7 @@ export default function SubmitReport() {
 						size: image.fileSize!,
 						type: image.mimeType!,
 						uri: url.href,
-					});
+					}).then((url) => url.toString());
 				})
 			)
 			]);
@@ -77,11 +77,29 @@ export default function SubmitReport() {
 			return;
 		}
 		const loc = await Location.getCurrentPositionAsync({});
-		setLocation(loc.coords);
+		setLocation(loc);
 	};
 
 	const handleSubmit = () => {
-		Alert.alert("Report submitted", "Thank you!");
+		addDocument(
+			'reports',
+			{
+				reportedAt: location?.timestamp!,
+				description,
+				location: JSON.stringify({ latitude: location?.coords.latitude, longitude: location?.coords.longitude }),
+				imageUrls
+			}
+		)
+			.then(() => {
+				setDescription("");
+				setImageUrls([]);
+				setLocation(null);
+				Alert.alert("Report submitted", "Thank you!");
+			})
+			.catch((e) => {
+				console.log(e);
+				Alert.alert("Failed to submit", e);
+			});
 	};
 
 	return (
@@ -95,17 +113,17 @@ export default function SubmitReport() {
 					multiline
 					value={description}
 					onChangeText={setDescription}
+					maxLength={500}
 				/>
 
 				{/* Location */}
 				<Text className="mt-5 mb-1 text-lg font-semibold">Location</Text>
-				<TouchableOpacity onPress={getLocation} className="bg-blue-600 rounded-lg p-3 mb-2">
-					<Text className="text-white text-center">Use Current Location</Text>
-				</TouchableOpacity>
-				{location && (
-					<Text className="text-gray-700">
-						Lat: {location.latitude.toFixed(5)}, Lon: {location.longitude.toFixed(5)}
-					</Text>
+				{location === null ? (
+					<TouchableOpacity onPress={getLocation} className="bg-blue-600 rounded-lg p-3 mb-2">
+						<Text className="text-white text-center">Use Current Location</Text>
+					</TouchableOpacity>
+				) : (
+					<Text className="text-center p-3 mb-2">Location Collected</Text>
 				)}
 
 				{/* Image Upload */}
@@ -123,10 +141,10 @@ export default function SubmitReport() {
 
 				{/* Image Carousel */}
 				{imageUrls.length > 0 && (
-					<ScrollView horizontal className="mt-2 mb-4">
+					<ScrollView horizontal className="mt-2 mb-4 pt-2">
 						{imageUrls.map((url, index) => (
 							<View key={index} className="relative mr-4">
-								<Image source={{ uri: url.toString() }} className="w-40 h-32 rounded-lg border" />
+								<Image source={{ uri: url }} className="w-40 h-32 rounded-lg border" />
 								<TouchableOpacity
 									className="absolute -top-2 -right-2 bg-red-500 rounded-full p-1"
 									onPress={() => removeImage(index)}
