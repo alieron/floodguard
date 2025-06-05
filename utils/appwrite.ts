@@ -1,4 +1,4 @@
-import { ID, Client, Storage, Databases, Query } from "react-native-appwrite";
+import { ID, Client, Storage, Databases, Models, Query } from "react-native-appwrite";
 
 import {
 	APPWRITE_PROJECT_ID,
@@ -32,47 +32,40 @@ export const uploadImage = async (image: { name: string; type: string; size: num
 };
 
 type Report = {
-	id: string,
 	reportedAt: number,
 	description: string,
 	location: string,
 	imageUrls: string[],
-}
+} & Models.Document;
 
 const collectionIds: Record<keyof CollectionTypes, string> = {
 	reports: "6840950c000db6602668",
+	warnings: "6841b0bf0032204d18cb",
 };
 
 type CollectionTypes = {
 	reports: Report,
+	warnings: Report,
 };
 
 export const addDocument = async <T extends keyof CollectionTypes>(
 	collectionName: T,
-	document: Omit<CollectionTypes[T], 'id'>
+	document: CollectionTypes[T]
 ) => {
-	return databases.createDocument(
+	return await databases.createDocument(
 		APPWRITE_DATABASE_ID,
 		collectionIds[collectionName],
 		ID.unique(),
 		document
-	);
+	) as CollectionTypes[T];
 };
 
 export const recentDocuments = async <T extends keyof CollectionTypes>(
 	collectionName: T
 ) => {
-	const result = await databases.listDocuments(
+	return await databases.listDocuments(
 		APPWRITE_DATABASE_ID,
 		collectionIds[collectionName],
-		[
-			Query.orderDesc('reportedAt')
-		]
-	);
-	return result.documents.map((doc) => {
-		return {
-			id: doc.$id,
-			...(doc as unknown as Omit<CollectionTypes[T], 'id'>),
-		} as CollectionTypes[T]
-	});
+		[]
+	) as { documents: CollectionTypes[T][], total: number };
 };

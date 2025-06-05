@@ -24,13 +24,7 @@ export default function Settings() {
   const [pubAlert, setPubAlert] = useState(true);
 
   return (
-    <View className="flex-1 bg-sky-200 px-5 pt-20">
-      <View className="flex-row justify-center mb-6">
-        <Text className="text-[25px] font-bold text-neutral-900">
-          SETTINGS
-        </Text>
-      </View>
-
+    <View className="flex-1 bg-sky-200 px-4 pt-8">
       <View className="mb-6">
         <Text className="text-base font-bold mb-3 text-neutral-900">
           NOTIFICATIONS

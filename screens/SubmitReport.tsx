@@ -104,7 +104,7 @@ export default function SubmitReport() {
 
 	return (
 		<View className="flex-1 bg-white">
-			<ScrollView contentContainerStyle={{ paddingBottom: 160 }} className="px-5 pt-2">
+			<View className="px-5 pt-2">
 				{/* Description */}
 				<Text className="mb-1 text-lg font-semibold">Description</Text>
 				<TextInput
@@ -155,7 +155,7 @@ export default function SubmitReport() {
 						))}
 					</ScrollView>
 				)}
-			</ScrollView>
+			</View>
 
 			{/* Submit Button */}
 			<View className="absolute bottom-20 left-0 right-0 p-4 bg-white border-t border-gray-200">

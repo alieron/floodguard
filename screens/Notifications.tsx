@@ -1,51 +1,77 @@
-import { Text, View, ScrollView } from "react-native";
-import NotificationBox from "../components/NotificationBox";
+import { useState, useEffect } from 'react';
+import { View, FlatList, RefreshControl } from 'react-native';
+import NotificationCard, { NotificationCardProps } from '../components/NotificationCard';
+import { recentDocuments } from '../utils/appwrite';
 
-export default function SubmitReport() {
-  return (
-    <View className="flex-1 bg-blue-300 px-5 pt-20">
-      <View className="flex-row justify-center gap-3 mb-6">
-        <Text className="text-center text-black text-3xl font-bold">NOTIFICATIONS</Text>
-      </View>
+const mockNotifications: any[] = [
+	{
+		id: "1",
+		type: "warning",
+		images: [
+			"https://placekitten.com/800/400",
+			"https://placekitten.com/801/400",
+		],
+		description: "Flash flood warning near King’s Road.",
+		timestamp: 1717555200000,
+	},
+	{
+		id: "2",
+		type: "report",
+		images: [
+			"https://placekitten.com/802/400",
+			"https://placekitten.com/803/400",
+			"https://placekitten.com/804/400",
+		],
+		description: "Water levels rising outside my flat.",
+		timestamp: 1717641600000,
+	},
+];
 
-      <ScrollView className="flex-1 w-full mb-24">
-      <NotificationBox
-        headerText="Warning"
-        subheading="Flash flood at King's Road"
-        content="Flash flood occurred at King’s Road (from Prince Road to Lutheran Road). Please avoid the area. PUB officers have been deployed to render assistance."
-        timeStamp="Just now"
-      >
-      </NotificationBox>
-            <NotificationBox
-        headerText="Report Submitted"
-        subheading="Report successfully submitted!"
-        content="You submitted a report on 20 May 2025 at 15:00.
-Location: Adam Road"
-        timeStamp="2 days ago"
-      >
-      </NotificationBox>
-            <NotificationBox
-        headerText="Warning"
-        subheading="Heavy rain in northeast regions"
-        content="Heavy rain expected in northeast regions. A flash flood is expected to occur. Drive safely and stay updated wwith the FloodGuard app to adequately plan your journey."
-        timeStamp="6 days ago"
-      >
-      </NotificationBox>
-            <NotificationBox
-        headerText="Warning"
-        subheading="Heavy rain in western regions"
-        content="Heavy rain expected in western regions. A flash flood is expected to occur. Drive safely and stay updated wwith the FloodGuard app to adequately plan your journey."
-        timeStamp="1w ago"
-      >
-      </NotificationBox>
-                  <NotificationBox
-        headerText="Warning"
-        subheading="Flash flood at Dunearn Road and Bukit Timah Road"
-        content="Flash flood occurred at Dunearn Road and Bukit Timah Road (near King Albert Park). Please avoid the area. PUB officers have been deployed to render assistance."
-        timeStamp="2w ago"
-      >
-      </NotificationBox>
-      </ScrollView>
-    </View>
-  );
+export default function NotificationsPage() {
+	const [notifications, setNotifications] = useState<NotificationCardProps[]>([]);
+	const [isRefreshing, setIsRefreshing] = useState(false);
+
+	const getNotifications = async () => {
+		const toCardProps = (type: "warning" | "report", data: any) => {
+			return {
+				type,
+				id: data.$id,
+				description: data.description,
+				reportedAt: data.reportedAt,
+				imageUrls: data.imageUrls
+			} as NotificationCardProps;
+		};
+
+		const notifs: NotificationCardProps[] = [];
+		notifs.push(...(await recentDocuments("reports")).documents.map((data) => toCardProps("report", data)));
+		notifs.push(...(await recentDocuments("warnings")).documents.map((data) => toCardProps("warning", data)));
+		// console.log(notifs) // Testing
+		notifs.sort((a, b) => a.reportedAt - b.reportedAt);
+		setNotifications(notifs);
+	};
+
+	const handleRefresh = () => {
+		setIsRefreshing(true);
+		getNotifications();
+		console.log(notifications);
+		setIsRefreshing(false);
+	}
+
+	useEffect(() => {
+		getNotifications();
+	}, []);
+
+	return (
+		<View className="flex-1 bg-sky-200 mb-20">
+			<View className="px-4 pb-4">
+				<FlatList
+					data={notifications}
+					keyExtractor={(item) => item.id}
+					renderItem={({ item }) => <NotificationCard item={item} />}
+					showsVerticalScrollIndicator={false}
+					refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />}
+				/>
+			</View>
+		</View>
+	);
 }
