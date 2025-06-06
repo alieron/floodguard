@@ -29,7 +29,7 @@ export default function NotificationsPage() {
 	const handleRefresh = () => {
 		setIsRefreshing(true);
 		getNotifications();
-		console.log(notifications);
+		// console.log(notifications);
 		setIsRefreshing(false);
 	}
 
