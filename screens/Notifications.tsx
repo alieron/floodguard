@@ -3,30 +3,6 @@ import { View, FlatList, RefreshControl } from 'react-native';
 import NotificationCard, { NotificationCardProps } from '../components/NotificationCard';
 import { recentDocuments } from '../utils/appwrite';
 
-const mockNotifications: any[] = [
-	{
-		id: "1",
-		type: "warning",
-		images: [
-			"https://placekitten.com/800/400",
-			"https://placekitten.com/801/400",
-		],
-		description: "Flash flood warning near King’s Road.",
-		timestamp: 1717555200000,
-	},
-	{
-		id: "2",
-		type: "report",
-		images: [
-			"https://placekitten.com/802/400",
-			"https://placekitten.com/803/400",
-			"https://placekitten.com/804/400",
-		],
-		description: "Water levels rising outside my flat.",
-		timestamp: 1717641600000,
-	},
-];
-
 export default function NotificationsPage() {
 	const [notifications, setNotifications] = useState<NotificationCardProps[]>([]);
 	const [isRefreshing, setIsRefreshing] = useState(false);
@@ -46,7 +22,7 @@ export default function NotificationsPage() {
 		notifs.push(...(await recentDocuments("reports")).documents.map((data) => toCardProps("report", data)));
 		notifs.push(...(await recentDocuments("warnings")).documents.map((data) => toCardProps("warning", data)));
 		// console.log(notifs) // Testing
-		notifs.sort((a, b) => a.reportedAt - b.reportedAt);
+		notifs.sort((a, b) => b.reportedAt - a.reportedAt);
 		setNotifications(notifs);
 	};
 
