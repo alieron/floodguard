@@ -50,7 +50,7 @@ type CollectionTypes = {
 
 export const addDocument = async <T extends keyof CollectionTypes>(
 	collectionName: T,
-	document: CollectionTypes[T]
+	document: Omit<CollectionTypes[T], keyof Models.Document>
 ) => {
 	return await databases.createDocument(
 		APPWRITE_DATABASE_ID,
