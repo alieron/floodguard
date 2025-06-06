@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Image, View, ScrollView, Text, TouchableOpacity } from "react-native";
 import MapView, { Callout, Marker, Region } from "react-native-maps";
 import { Ionicons } from "@expo/vector-icons";
+import { recentDocuments } from "../utils/appwrite";
 
 const singaporeRegion: Region = {
   latitude: 1.3521,
@@ -20,10 +21,32 @@ interface ReportProps {
 
 export default function Home() {
   const [expanded, setExpanded] = useState(false);
-  const [addedPin, setAddedPin] = useState(false);
-  const [visible, setVisible] = useState(false);
+  const [reports, setReports] = useState<ReportProps[]>([]);
+
+  const getReports = async () => {
+    const toCardProps = (data: any) => {
+      return {
+        id: data.$id,
+        description: data.description,
+        reportedAt: data.reportedAt,
+        location: JSON.parse(data.location),
+        imageUrl: data.imageUrls[0]
+      } as ReportProps;
+    };
+
+    const reps: ReportProps[] = [];
+    reps.push(...(await recentDocuments("reports")).documents.map((data) => toCardProps(data)));
+    reps.sort((a, b) => a.reportedAt - b.reportedAt);
+    setReports(reps);
+  };
+
   const handleRefresh = () => {
+    getReports();
   }
+
+  useEffect(() => {
+    getReports();
+  }, []);
 
   return (
     <View className="flex-1 mb-20">
@@ -53,33 +76,39 @@ export default function Home() {
           </View>
         )}
       </View>
-
-      <TouchableOpacity
-        className="absolute top-[450px] left-[160px] w-[50px] h-[55px] bg-transparent"
-        onPress={() => setVisible(true)}
-      />
-
-      {visible && (
-        <View className="absolute top-[150px] self-center w-[85%] bg-white rounded-lg z-10 shadow-md pb-2">
-          <View className="bg-blue-600 p-2 rounded-t-lg items-end">
-            <TouchableOpacity onPress={() => setVisible(false)}>
-              <Text className="text-white text-lg px-1.5">✕</Text>
-            </TouchableOpacity>
-          </View>
-          <Image
-            source={require("../assets/FloodImageExample.png")}
-            className="w-full h-[200px]"
-            resizeMode="cover"
-          />
-          <Text className="text-xs text-right mt-1 mr-2 text-gray-500">Uploaded at 14:10</Text>
-        </View>
-      )}
       <MapView
         style={{ flex: 1 }}
         initialRegion={singaporeRegion}
         showsUserLocation
         showsMyLocationButton
       >
+        {reports.map((report) => (
+          <Marker
+            key={report.id}
+            coordinate={{
+              latitude: report.location.latitude,
+              longitude: report.location.longitude,
+            }}
+          >
+            <Callout tooltip>
+              <View className="bg-white p-2 rounded-xl w-52 shadow-md">
+                <Image
+                  src={report.imageUrl}
+                  className="w-full h-40 rounded-md"
+                  resizeMode="cover"
+                  alt={report.description}
+                />
+              </View>
+            </Callout>
+          </Marker>
+        ))}
+
+        <TouchableOpacity
+          className="absolute bottom-4 right-4 p-2 bg-blue-600 rounded-full"
+          onPress={handleRefresh}
+        >
+          <Ionicons name="refresh" size={24} color="white" />
+        </TouchableOpacity>
       </MapView>
     </View >
   );
