@@ -1,31 +1,41 @@
-import { Text, View, Image, ImageBackground, TouchableOpacity } from 'react-native';
-import { useState } from 'react';
-import { FontAwesome } from '@expo/vector-icons';
+import React, { useEffect, useState } from "react";
+import { Image, View, ScrollView, Text, TouchableOpacity } from "react-native";
+import MapView, { Callout, Marker, Region } from "react-native-maps";
+import { Ionicons } from "@expo/vector-icons";
+
+const singaporeRegion: Region = {
+  latitude: 1.3521,
+  longitude: 103.8198,
+  latitudeDelta: 0.08,
+  longitudeDelta: 0.08,
+};
+
+interface ReportProps {
+  id: string,
+  description: string,
+  reportedAt: number,
+  location: { latitude: number, longitude: number },
+  imageUrl: string,
+};
 
 export default function Home() {
   const [expanded, setExpanded] = useState(false);
   const [addedPin, setAddedPin] = useState(false);
   const [visible, setVisible] = useState(false);
+  const handleRefresh = () => {
+  }
 
   return (
-    <ImageBackground
-      source={
-        addedPin
-          ? require("../assets/FloodMapAfter.png")
-          : require("../assets/FloodMapBefore.png")
-      }
-      className="flex-1 justify-center"
-      resizeMode="cover"
-    >
-      <View className="absolute top-20 self-center w-[90%] z-10">
+    <View className="flex-1 mb-20">
+      <View className="absolute top-12 self-center w-[90%] z-10">
         <TouchableOpacity
-          className="bg-blue-600 px-4 py-3 rounded-t-lg flex-row justify-center items-center"
+          className={`bg-blue-600 px-4 py-3 flex-row justify-center items-center ${expanded ? "rounded-t-lg" : "rounded-lg"}`}
           onPress={() => setExpanded(!expanded)}
         >
           <Text className="text-white font-bold text-base">ALERTS</Text>
-          <FontAwesome
+          <Ionicons
             name={expanded ? "chevron-up" : "chevron-down"}
-            size={16}
+            size={20}
             color="white"
             style={{ marginLeft: 8 }}
           />
@@ -64,13 +74,13 @@ export default function Home() {
           <Text className="text-xs text-right mt-1 mr-2 text-gray-500">Uploaded at 14:10</Text>
         </View>
       )}
-
-      <TouchableOpacity 
-        className="absolute bottom-[100px] right-[30px] p-2 bg-white rounded-full"
-        onPress={() => setAddedPin(!addedPin)}
+      <MapView
+        style={{ flex: 1 }}
+        initialRegion={singaporeRegion}
+        showsUserLocation
+        showsMyLocationButton
       >
-        <FontAwesome name="refresh" size={24} color="black" />
-      </TouchableOpacity>
-    </ImageBackground>
+      </MapView>
+    </View >
   );
 }
