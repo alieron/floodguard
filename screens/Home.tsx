@@ -19,6 +19,23 @@ interface ReportProps {
   imageUrl: string,
 };
 
+const formatDate = (ms: number) => {
+	const date = new Date(ms);
+	return date.toLocaleString(undefined, {
+		year: "numeric",
+		month: "short",
+		day: "numeric",
+	});
+};
+
+const formatTime = (ms: number) => {
+	const date = new Date(ms);
+	return date.toLocaleString(undefined, {
+		hour: "numeric",
+		minute: "2-digit",
+	});
+};
+
 export default function Home() {
   const [expanded, setExpanded] = useState(false);
   const [reports, setReports] = useState<ReportProps[]>([]);
@@ -36,7 +53,7 @@ export default function Home() {
 
     const reps: ReportProps[] = [];
     reps.push(...(await recentDocuments("reports")).documents.map((data) => toCardProps(data)));
-    reps.sort((a, b) => a.reportedAt - b.reportedAt);
+    reps.sort((a, b) => b.reportedAt - a.reportedAt);
     setReports(reps);
   };
 
@@ -65,15 +82,19 @@ export default function Home() {
         </TouchableOpacity>
 
         {expanded && (
-          <View className="bg-white p-3 rounded-b-lg">
-            <Text className="font-bold text-sm mb-1.5">Flash flood at King's Road</Text>
-            <Text className="text-xs mb-1.5">
-              Flash flood occurred at King's Road (from Prince Road to Lutheran
-              Road). Please avoid the area. PUB officers have been deployed to
-              render assistance.
-            </Text>
-            <Text className="text-[11px] text-gray-500 text-right">Issued at 1:03</Text>
-          </View>
+          <ScrollView className="bg-white max-h-36 px-3 rounded-b-lg">
+            {reports.map((report, index) => (
+              <View key={report.id} className={`py-3 ${index === reports.length - 1 ? "" : "border-b"}`}>
+                <Text className="font-bold text-sm mb-1.5">{formatDate(report.reportedAt)}</Text>
+                <Text className="text-sm mb-1.5">
+                  {report.description.length<=45 ? report.description : `${report.description.slice(0, 45).split(" ").slice(0, 8).join(" ")}...`}
+                </Text>
+                <Text className="text-xs text-gray-500 text-right">{formatTime(report.reportedAt)}</Text>
+              </View>
+
+            )
+            )}
+          </ScrollView>
         )}
       </View>
       <MapView
