@@ -102,6 +102,7 @@ export default function Home() {
         initialRegion={singaporeRegion}
         showsUserLocation
         showsMyLocationButton
+        onMapReady={() => getReports()}
       >
         {reports.map((report) => (
           <Marker
