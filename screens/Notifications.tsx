@@ -14,7 +14,7 @@ export default function NotificationsPage() {
 				id: data.$id,
 				description: data.description,
 				reportedAt: data.reportedAt,
-				imageUrls: data.imageUrls
+				imageUrl: data.imageUrls[0]
 			} as NotificationCardProps;
 		};
 
