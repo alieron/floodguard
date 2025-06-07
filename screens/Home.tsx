@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Image, View, ScrollView, Text, TouchableOpacity } from "react-native";
 import MapView, { Callout, Marker, Region } from "react-native-maps";
 import { Ionicons } from "@expo/vector-icons";
@@ -20,28 +20,46 @@ interface ReportProps {
 };
 
 const formatDate = (ms: number) => {
-	const date = new Date(ms);
-	return date.toLocaleString(undefined, {
-		year: "numeric",
-		month: "short",
-		day: "numeric",
-	});
+  const date = new Date(ms);
+  return date.toLocaleString(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 };
 
 const formatTime = (ms: number) => {
-	const date = new Date(ms);
-	return date.toLocaleString(undefined, {
-		hour: "numeric",
-		minute: "2-digit",
-	});
+  const date = new Date(ms);
+  return date.toLocaleString(undefined, {
+    hour: "numeric",
+    minute: "2-digit",
+  });
 };
 
-export default function Home() {
+export default function Home({ navigation, route }: any) {
   const [expanded, setExpanded] = useState(false);
   const [reports, setReports] = useState<ReportProps[]>([]);
+  const mapRef = useRef<MapView>(null);
+
+  const { focusedReportId } = route.params || {};
+  const focusedReport = reports.find((r) => r.id === focusedReportId);
+
+  useEffect(() => {
+    if (focusedReport && mapRef.current) {
+      mapRef.current.animateToRegion(
+        {
+          latitude: focusedReport.location.latitude,
+          longitude: focusedReport.location.longitude,
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
+        },
+        1000
+      );
+    }
+  }, [focusedReport]);
 
   const getReports = async () => {
-    const toCardProps = (data: any) => {
+    const toReportProps = (data: any) => {
       return {
         id: data.$id,
         description: data.description,
@@ -52,7 +70,7 @@ export default function Home() {
     };
 
     const reps: ReportProps[] = [];
-    reps.push(...(await recentDocuments("reports")).documents.map((data) => toCardProps(data)));
+    reps.push(...(await recentDocuments("reports")).documents.map((data) => toReportProps(data)));
     reps.sort((a, b) => b.reportedAt - a.reportedAt);
     setReports(reps);
   };
@@ -87,7 +105,7 @@ export default function Home() {
               <View key={report.id} className={`py-3 ${index === reports.length - 1 ? "" : "border-b"}`}>
                 <Text className="font-bold text-sm mb-1.5">{formatDate(report.reportedAt)}</Text>
                 <Text className="text-sm mb-1.5">
-                  {report.description.length<=45 ? report.description : `${report.description.slice(0, 45).split(" ").slice(0, 8).join(" ")}...`}
+                  {report.description.length <= 45 ? report.description : `${report.description.slice(0, 45).split(" ").slice(0, 8).join(" ")}...`}
                 </Text>
                 <Text className="text-xs text-gray-500 text-right">{formatTime(report.reportedAt)}</Text>
               </View>
@@ -98,6 +116,7 @@ export default function Home() {
         )}
       </View>
       <MapView
+        ref={mapRef}
         style={{ flex: 1 }}
         initialRegion={singaporeRegion}
         showsUserLocation
@@ -112,7 +131,7 @@ export default function Home() {
               longitude: report.location.longitude,
             }}
           >
-            <Callout tooltip>
+            <Callout tooltip onPress={() => navigation.navigate("Details", { id: report.id, type: "report" })}>
               <View className="bg-white p-2 rounded-xl w-52 shadow-md">
                 <Image
                   src={report.imageUrl}
