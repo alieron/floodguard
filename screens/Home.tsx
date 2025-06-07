@@ -36,7 +36,7 @@ const formatTime = (ms: number) => {
 	});
 };
 
-export default function Home() {
+export default function Home({ navigation }: any) {
   const [expanded, setExpanded] = useState(false);
   const [reports, setReports] = useState<ReportProps[]>([]);
 
@@ -112,7 +112,7 @@ export default function Home() {
               longitude: report.location.longitude,
             }}
           >
-            <Callout tooltip>
+            <Callout tooltip onPress={() => navigation.navigate("Details", { id: report.id, type: "report" })}>
               <View className="bg-white p-2 rounded-xl w-52 shadow-md">
                 <Image
                   src={report.imageUrl}
