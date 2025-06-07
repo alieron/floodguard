@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View, Text, Dimensions, Image, ScrollView, NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
+import { View, Text, Dimensions, Image, ScrollView, NativeScrollEvent, NativeSyntheticEvent, Button, Pressable } from 'react-native';
 import { getDocumentByID } from '../utils/appwrite';
 
 const { width } = Dimensions.get('window');
@@ -106,6 +106,11 @@ export default function DetailsScreen({ navigation, route }: any) {
             <Text className="text-lg font-semibold mb-2">Description</Text>
             <Text className="text-base text-gray-700 mb-4">{details.description}</Text>
             <Text className="text-sm text-gray-500">Posted on {formatDate(details.reportedAt)}</Text>
+            {type === "report" && (
+              <Pressable className="items-center mt-4" onPress={() => navigation.navigate('Home', { focusedReportId: id })}>
+                <Text className="text-blue-500">View on Map</Text>
+              </Pressable>
+            )}
           </View>
         </>
       )}
