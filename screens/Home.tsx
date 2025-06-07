@@ -41,7 +41,7 @@ export default function Home() {
   const [reports, setReports] = useState<ReportProps[]>([]);
 
   const getReports = async () => {
-    const toCardProps = (data: any) => {
+    const toReportProps = (data: any) => {
       return {
         id: data.$id,
         description: data.description,
@@ -52,7 +52,7 @@ export default function Home() {
     };
 
     const reps: ReportProps[] = [];
-    reps.push(...(await recentDocuments("reports")).documents.map((data) => toCardProps(data)));
+    reps.push(...(await recentDocuments("reports")).documents.map((data) => toReportProps(data)));
     reps.sort((a, b) => b.reportedAt - a.reportedAt);
     setReports(reps);
   };
