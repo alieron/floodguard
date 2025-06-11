@@ -7,7 +7,7 @@ export default function BottomNavBar({ state, navigation }: BottomTabBarProps) {
 
   return (
     <View className="absolute bottom-0 left-0 right-0">
-      <View className="flex-row justify-between items-center bg-blue-500 px-2 pb-7 border-t border-gray-200">
+      <View className="flex-row justify-between items-center bg-blue-600 px-2 pb-7 border-t border-gray-200">
         <Pressable onPress={() => navigation.navigate('Home')} className="p-3">
           <Ionicons name={currentScreen === "Home" ? "home-sharp" : "home-outline"} size={24} color="white" />
         </Pressable>
