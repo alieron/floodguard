@@ -83,7 +83,7 @@ export default function FloodBot() {
               onSubmitEditing={() => input !== "" && sendMessage(input)}
             />
             <TouchableOpacity
-              className="bg-blue-500 px-4 py-2 rounded-full"
+              className="bg-blue-600 px-4 py-2 rounded-full"
               onPress={() => input && sendMessage(input)}
             >
               <Text className="text-white">Send</Text>

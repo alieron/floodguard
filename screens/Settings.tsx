@@ -9,7 +9,7 @@ function SettingRow({ label, value, onChange }: { label: string, value: boolean,
         value={value}
         onValueChange={onChange}
         thumbColor="white"
-        trackColor={{ true: "#0B64F0", false: "#ccc" }}
+        trackColor={{ true: "#155dfc", false: "#ccc" }}
       />
     </View>
   );
