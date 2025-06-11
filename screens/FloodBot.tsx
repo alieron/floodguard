@@ -1,7 +1,16 @@
-import { Text, View } from 'react-native';
-import { Dialogflow_V2 } from 'react-native-dialogflow';
-import React, { useCallback, useState } from 'react';
-import { GiftedChat, IMessage } from 'react-native-gifted-chat';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  FlatList,
+  KeyboardAvoidingView,
+  Platform,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from "react-native";
+import { Dialogflow_V2 } from "react-native-dialogflow";
 
 import {
   DIALOGFLOW_SERVICE_ACC,
@@ -12,39 +21,37 @@ import {
 Dialogflow_V2.setConfiguration(
   DIALOGFLOW_SERVICE_ACC,
   DIALOGFLOW_PRIVATE_KEY,
-  'en',
+  Dialogflow_V2.LANG_ENGLISH,
   DIALOGFLOW_PROJECT_ID,
 );
 
-interface DialogflowResult {
-  queryResult: {
-    fulfillmentText: string;
-  };
-}
+type Message = {
+  text: string;
+  from: "user" | "bot";
+};
 
-function FloodBot() {
-  const [messages, setMessages] = useState<IMessage[]>([]);
-  const onSend = (newMessages: IMessage[] = []) => {
-    setMessages(prev => GiftedChat.append(prev, newMessages));
-    const userMessage = newMessages[0].text;
+export default function FloodBot() {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState("");
+
+  const sendMessage = (text: string) => {
+    const userMessage: Message = { text, from: "user" };
+    // const botMessage: Message = { text: "Echo: " + text, from: "bot" }; // Simulated
+    setMessages((prev) => [userMessage, ...prev]);
+    setInput("");
     Dialogflow_V2.requestQuery(
-      userMessage,
-      (result: object) => {
+      text,
+      (result: any) => {
         // Handle chatbot response
-        const res = result as DialogflowResult;
-        const chatbotResponse = res.queryResult.fulfillmentText;
+        const res = result;
+        console.log(result);
+        const chatbotResponse = res.queryResult.fulfillmentText as string;
         // Add the chatbot's response to the chat interface
-        const botMessage = {
-          _id: Math.random().toString(36).substring(7),
+        const botMessage: Message = {
           text: chatbotResponse,
-          createdAt: new Date(),
-          user: {
-            _id: 2,
-            name: 'Floodbot',
-            avatar: 'https://imgur.com/7k12EPD' //Can replace this with FloodGuard image
-          },
+          from: "bot",
         };
-        setMessages(previousMessages => GiftedChat.append(previousMessages, [botMessage]));
+        setMessages((prev) => [botMessage, ...prev]);
       },
       error => {
         // Handle errors
@@ -52,15 +59,53 @@ function FloodBot() {
       }
     );
   };
+
+  const renderItem = ({ item }: { item: Message }) => (
+    <View
+      className={`my-1 px-3 py-2 mx-3 rounded-2xl ${
+        item.from === "user" ? "bg-blue-500 self-end" : "bg-gray-200 self-start"
+      }`}
+    >
+      <Text className={item.from === "user" ? "text-white" : "text-black"}>
+        {item.text}
+      </Text>
+    </View>
+  );
+
   return (
-    <GiftedChat
-      messages={messages}
-      onSend={newMessages => onSend(newMessages)}
-      user={{
-        _id: 1,
-      }}
-    />
+    <KeyboardAvoidingView
+      className="flex-1 bg-white mb-20"
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={90} // Adjusted for keyboard height
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View className="flex-1">
+          <FlatList
+            className="flex-1"
+            data={messages}
+            renderItem={renderItem}
+            keyExtractor={(_, i) => i.toString()}
+            inverted
+            contentContainerStyle={{ paddingBottom: 20 }}
+          />
+          <View className="flex-row items-center border-t border-gray-300 px-3 py-2 bg-white">
+            <TextInput
+              className="flex-1 border border-gray-300 rounded-full px-4 py-2 mr-2"
+              value={input}
+              onChangeText={setInput}
+              placeholder="Type your message..."
+              returnKeyType="send"
+              onSubmitEditing={() => input && sendMessage(input)}
+            />
+            {/* <TouchableOpacity
+              className="bg-blue-500 px-4 py-2 rounded-full"
+              onPress={() => input && sendMessage(input)}
+            >
+              <Text className="text-white">Send</Text>
+            </TouchableOpacity> */}
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 }
-
-export default FloodBot();
