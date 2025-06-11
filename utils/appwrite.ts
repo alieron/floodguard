@@ -65,7 +65,17 @@ export const recentDocuments = async <T extends keyof CollectionTypes>(
 ) => {
 	return await databases.listDocuments(
 		APPWRITE_DATABASE_ID,
-		collectionIds[collectionName],
-		[]
+		collectionIds[collectionName]
 	) as { documents: CollectionTypes[T][], total: number };
 };
+
+export const getDocumentByID = async <T extends keyof CollectionTypes>(
+	collectionName: T,
+	id: string
+) => {
+	return await databases.getDocument(
+		APPWRITE_DATABASE_ID,
+		collectionIds[collectionName],
+		id
+	) as CollectionTypes[T];
+}

@@ -2,7 +2,7 @@ import { View, Pressable } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 
-export default function BottomNavBar({ state, descriptors, navigation }: BottomTabBarProps) {
+export default function BottomNavBar({ state, navigation }: BottomTabBarProps) {
   const currentScreen = state.routeNames[state.index]; 
 
   return (
