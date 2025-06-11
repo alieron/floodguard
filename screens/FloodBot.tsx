@@ -8,22 +8,14 @@ import {
   KeyboardAvoidingView,
   Platform,
   Keyboard,
-  TouchableWithoutFeedback,
+  TouchableWithoutFeedback
 } from "react-native";
-import { Dialogflow_V2 } from "react-native-dialogflow";
+import { GoogleGenAI } from "@google/genai";
 
 import {
-  DIALOGFLOW_SERVICE_ACC,
-  DIALOGFLOW_PRIVATE_KEY,
-  DIALOGFLOW_PROJECT_ID
+  GEMINI_API_KEY
 } from '@env';
 
-Dialogflow_V2.setConfiguration(
-  DIALOGFLOW_SERVICE_ACC,
-  DIALOGFLOW_PRIVATE_KEY,
-  Dialogflow_V2.LANG_ENGLISH,
-  DIALOGFLOW_PROJECT_ID,
-);
 
 type Message = {
   text: string;
@@ -34,37 +26,27 @@ export default function FloodBot() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
 
-  const sendMessage = (text: string) => {
+  const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+
+  const sendMessage = async (text: string) => {
     const userMessage: Message = { text, from: "user" };
     // const botMessage: Message = { text: "Echo: " + text, from: "bot" }; // Simulated
     setMessages((prev) => [userMessage, ...prev]);
     setInput("");
-    Dialogflow_V2.requestQuery(
-      text,
-      (result: any) => {
-        // Handle chatbot response
-        const res = result;
-        console.log(result);
-        const chatbotResponse = res.queryResult.fulfillmentText as string;
-        // Add the chatbot's response to the chat interface
-        const botMessage: Message = {
-          text: chatbotResponse,
-          from: "bot",
-        };
-        setMessages((prev) => [botMessage, ...prev]);
-      },
-      error => {
-        // Handle errors
-        console.error('DialogFlow error:', error);
-      }
-    );
+
+    const response = await ai.models.generateContent({
+      model: "gemini-2.0-flash",
+      contents: text,
+    });
+    const outText = response.text as string;
+    console.log(outText)
+    setMessages((prev) => [{ text: outText, from: "bot" }, ...prev])
   };
 
   const renderItem = ({ item }: { item: Message }) => (
     <View
-      className={`my-1 px-3 py-2 mx-3 rounded-2xl ${
-        item.from === "user" ? "bg-blue-500 self-end" : "bg-gray-200 self-start"
-      }`}
+      className={`my-1 px-3 py-2 mx-3 rounded-2xl ${item.from === "user" ? "bg-blue-500 self-end" : "bg-gray-200 self-start"
+        }`}
     >
       <Text className={item.from === "user" ? "text-white" : "text-black"}>
         {item.text}
@@ -95,14 +77,14 @@ export default function FloodBot() {
               onChangeText={setInput}
               placeholder="Type your message..."
               returnKeyType="send"
-              onSubmitEditing={() => input && sendMessage(input)}
+              onSubmitEditing={() => input !== "" && sendMessage(input)}
             />
-            {/* <TouchableOpacity
+            <TouchableOpacity
               className="bg-blue-500 px-4 py-2 rounded-full"
               onPress={() => input && sendMessage(input)}
             >
               <Text className="text-white">Send</Text>
-            </TouchableOpacity> */}
+            </TouchableOpacity>
           </View>
         </View>
       </TouchableWithoutFeedback>
