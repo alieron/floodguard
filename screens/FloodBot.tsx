@@ -37,6 +37,9 @@ export default function FloodBot() {
     const response = await ai.models.generateContent({
       model: "gemini-2.0-flash",
       contents: text,
+      config: {
+        systemInstruction: "You are Floodbot, a flood assistant, users from Singapore may ask you questions when encoutering floods, help them by providing advice on how to remain safe. In Singapore, 995 is the number for the SCDF."
+      }
     });
     const outText = response.text as string;
     console.log(outText)
