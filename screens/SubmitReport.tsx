@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Alert, Image, Text, TextInput, View, ScrollView, TouchableOpacity } from "react-native";
+import { Alert, Image, Text, TextInput, View, ScrollView, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import * as ImagePicker from "expo-image-picker";
@@ -104,6 +104,7 @@ export default function SubmitReport() {
 
 	return (
 		<View className="flex-1 bg-white">
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 			<View className="px-5 pt-2">
 				{/* Description */}
 				<Text className="mb-1 text-lg font-semibold">Description</Text>
@@ -155,7 +156,8 @@ export default function SubmitReport() {
 						))}
 					</ScrollView>
 				)}
-			</View>
+        </View>
+			</TouchableWithoutFeedback>
 
 			{/* Submit Button */}
 			<View className="absolute bottom-20 left-0 right-0 p-4 bg-white border-t border-gray-200">
