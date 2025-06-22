@@ -1,97 +1,82 @@
 # FloodGuard
 
-[![Expo](https://img.shields.io/badge/Expo-000020?logo=expo&logoColor=fff)](#) [![React Native](https://img.shields.io/badge/React_Native-%2320232a.svg?logo=react&logoColor=%2361DAFB)](#) [![TailwindCSS](https://img.shields.io/badge/Tailwind%20CSS-%2338B2AC.svg?logo=tailwind-css&logoColor=white)](#) 
+<div align="center">
+    <img src="../assets/floodguard.png" alt="FloodGuard" width="300">
+    <p align="center">“Be Ready, Wherever the Rain Hits.”<p>
+</div>
 
-### Setup for Dev
+FloodGuard is an all-in-one flood safety companion designed to provide Singaporean users with:
+1. real-time and positional alerts, based on a user reporting system
+2. flood warnings, from government authorities (NEA and PUB)
+3. personalised assistance, through an AI chatbot, if users find themselves in a flood
 
-1. Clone the repo
-```
-git clone -b dev https://github.com/alieron/floodguard.git
-cd floodguard
-```
-2. Install dependencies
-```
-npm i
-```
-3. Development
-```
-npm run dev 
-```
-> runs the expo dev server
+Made for DSTA's Brainhack 2025 Code EXP hackathon, in response to the "Crisis Management and Reporting" prompt.
 
-### Gitflow
+## Core Features
 
-#### Making a new feature
+#### FloodMap
+<div align="center">
+    <img src="./floodmap1.jpg" alt="FloodGuard" width="200">
+    <img src="./floodmap2.jpg" alt="FloodGuard" width="200">
+    <img src="./floodmap3.jpg" alt="FloodGuard" width="200">
+</div>
 
-1. sync your **local** `dev` branch with the **remote** `dev` branch
-```
-git checkout dev
-git pull
-```
+</br>
 
-2. create a new **local** feature branch
-```
-git checkout -b <branch-name>
-```
+The main page of the app, featuring a map of Singapore, provides a cartographic display of the on-going flooding events(pins), informing users of which areas to avoid. Clicking on the pins also reveals a thumbnail image of the flooding event, and the alerts tab provides a summary of the events occuring.
 
-3. create the **remote** branch for this feature
-```
-git push -u origin <branch-name>
-```
-> `-u` sets the upstream remote branch for your local branch
+#### Notifications and Warnings
+<div align="center">
+    <img src="./notifications1.jpg" alt="FloodGuard" width="200">
+    <img src="./notifications2.jpg" alt="FloodGuard" width="200">
+</div>
 
-4. stage and commit as usual
+</br>
 
-- use present tense verbs
-- make frequent and incremental commits, but ensure that the app is in a working state before every commit
+Displays the most recent flood reports and warnings from PUB/NEA. Users can click on any of the reports/warnings to see more information or view the location of the report on the map 
 
-5. push your changes to the **remote** branch
+#### Reporting
+<div align="center">
+    <img src="./report.jpg" alt="FloodGuard" width="200">
+</div>
 
-- push frequently as well
-```
-git push
-```
-> don't need the `-u ...` since upstream is already set
+</br>
 
-#### Merging your feature into `dev`
+Allows the user to submit a report if they encounter a flood, with a description, location(to display on the FloodMap) and up to 5 images capturing the flood. We plan to leverage AI to verify these images to filter out false reports.
 
-1. make a pull request on github
+#### FloodBot
+<div align="center">
+    <img src="./floodbot1.jpg" alt="FloodGuard" width="200">
+    <img src="./floodbot2.jpg" alt="FloodGuard" width="200">
+</div>
 
-- ensure the base branch is set to `dev`, don't pull request to `master`
-![git-pr](git-pull-request.png)
+</br>
 
-2. detailing your pull request
+AI chatbot with additional context to provide assistance to Singaporeans that find themselves in a flood or want to learn more about flood preparedness and safety.
 
-- summaries your feature in the title
-- if your pull request fixes any issues, use the [keywords](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword) to link your pull request to this issue
+#### Settings
+<div align="center">
+    <img src="./settings.jpg" alt="FloodGuard" width="200">
+</div>
 
-3. merge
+</br>
 
-- if there are no merge conflicts and you're confident, merge
-- if not, request for a review
+A settings page for the user to configure the app's notifications settings.
 
-4. delete your branch, both **local** and **remote**
-```
-git branch -D <branch-name>
-git push -D origin <branch-name>
-```
+## Tech Stack
 
-#### New feature merged into `dev`, that you want to use in your feature
+Technology|Purpose|Rationale
+-|-|-
+![React Native](https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) | Cross-platform mobile app framework | Allows the app to function on both Android and iOS devices without having to write the app separately for each.
+![Expo](https://img.shields.io/badge/expo-1C1E24?style=for-the-badge&logo=expo&logoColor=#D04A37) | Development platform for React Native | Allows for rapid setup for development and prototyping.
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white) | CSS Frameworks | Provides utility classes for styling without writing any CSS code.
+![Appwrite](https://img.shields.io/badge/Appwrite-%23FD366E.svg?style=for-the-badge&logo=appwrite&logoColor=white) | Backend as a Service | Hosts the databases and filestorage bucket for the app, allowing the app to adopt a serverless approach.
+![Google Gemini](https://img.shields.io/badge/google%20gemini-8E75B2?style=for-the-badge&logo=google%20gemini&logoColor=white) | AI | Provides the chat backend for FloodBot.
 
-1. pull `dev`
-```
-git checkout dev
-git pull
-```
+## Miscellaneous
 
-2. locally merge `dev` into your branch
-```
-git checkout <branch-name>
-git merge dev
-```
+[Pitch Slides](Pitch-Slides.pdf)
 
-3. resolve any merge conflicts locally
+[Pitch Video](https://youtu.be/hPfeRuxmKIo)
 
-- use the vscode ui to choose which changes to keep
-
-4. continue developing on your branch as ususal
+[Development](dev.md)
