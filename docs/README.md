@@ -12,6 +12,8 @@ FloodGuard is an all-in-one flood safety companion designed to provide Singapore
 
 Made for DSTA's Brainhack 2025 Code EXP hackathon, in response to the "Crisis Management and Reporting" prompt.
 
+Qualified as finalists!
+
 ## Core Features
 
 #### FloodMap
@@ -69,7 +71,7 @@ Technology|Purpose|Rationale
 -|-|-
 ![React Native](https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) | Cross-platform mobile app framework | Allows the app to function on both Android and iOS devices without having to write the app separately for each.
 ![Expo](https://img.shields.io/badge/expo-1C1E24?style=for-the-badge&logo=expo&logoColor=#D04A37) | Development platform for React Native | Allows for rapid setup for development and prototyping.
-![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white) | CSS Frameworks | Provides utility classes for styling without writing any CSS code.
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white) | CSS framework | Provides utility classes for styling without writing any CSS code.
 ![Appwrite](https://img.shields.io/badge/Appwrite-%23FD366E.svg?style=for-the-badge&logo=appwrite&logoColor=white) | Backend as a Service | Hosts the databases and filestorage bucket for the app, allowing the app to adopt a serverless approach.
 ![Google Gemini](https://img.shields.io/badge/google%20gemini-8E75B2?style=for-the-badge&logo=google%20gemini&logoColor=white) | AI | Provides the chat backend for FloodBot.
 
